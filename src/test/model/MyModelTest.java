@@ -1,7 +1,12 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 
-class MyModelTest {
-    // delete or rename this class!
+class PurchaseMovieTicketTest {
+
+    @BeforeEach
+    void runBefore(){
+
+    }
+
 }
