@@ -29,6 +29,8 @@ public class MovieBookingApp {
         payment();
         System.out.println(tickets.getNumOfTickets() + " tickets have been purchased");
         System.out.println("Thank you and enjoy your movie!");
+        rate();
+        System.out.println("Thank you and enjoy your day!");
 
 
     }
@@ -62,6 +64,7 @@ public class MovieBookingApp {
         movie = new Movie("Encanto", "6:30pm");
         System.out.println(movie.getTitle() + " is selected for " + movie.getShowtime());
         tickets.addTicket(ticket);
+        System.out.println("This movie is rated " + movie.getRating());
 
 
     }
@@ -70,6 +73,7 @@ public class MovieBookingApp {
         movie = new Movie("The Batman", "9:30pm");
         System.out.println(movie.getTitle() + " is selected for " + movie.getShowtime());
         tickets.addTicket(ticket);
+        System.out.println("This movie is rated " + movie.getRating());
 
     }
 
@@ -77,12 +81,14 @@ public class MovieBookingApp {
         movie = new Movie("Spider-man", "7:00pm");
         System.out.println(movie.getTitle() + " is selected for " + movie.getShowtime());
         tickets.addTicket(ticket);
+        System.out.println("This movie is rated " + movie.getRating());
     }
 
     private void book4() {
         movie = new Movie("Uncharted", "10:45pm");
         System.out.println(movie.getTitle() + " is selected for " + movie.getShowtime());
         tickets.addTicket(ticket);
+        System.out.println("This movie is rated " + movie.getRating());
     }
 
     private void addTickets(String command) {
@@ -94,6 +100,7 @@ public class MovieBookingApp {
 
         if (command.equals("yes")) {
             runBooking();
+            tickets.addTicket(ticket);
 
 
         } else if (command.equals("no")) {
@@ -113,6 +120,14 @@ public class MovieBookingApp {
     private void payment() {
 
         System.out.println("Your payment is $" + tickets.getTotalPrice());
+    }
+
+    private void rate() {
+
+        System.out.println("Please rate the movie");
+
+        double command = input.nextDouble();
+        movie.giveRating(command);
     }
 
 
