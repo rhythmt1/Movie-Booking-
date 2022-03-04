@@ -24,3 +24,5 @@ are good, makes the experience much more enjoyable.
 - As a user, I want to be able to see how many tickets I have bought
 - As a user, I want to be able to post a rating for a movie
 - As a user, I want to be able to see a movie rating
+- As a user, I want to be able to save my purchase information
+- As a user, I want to be able to load my saved information
