@@ -102,6 +102,7 @@ public class MovieBookingApp {
         System.out.println("This movie is rated " + movie.getRating());
 
 
+
     }
 
     private void book2() {

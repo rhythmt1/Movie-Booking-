@@ -1,6 +1,9 @@
 package model;
 
-public class Ticket {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Ticket implements Writable {
     private static final double price = 12.99;
 
     private int seatNum;
@@ -42,6 +45,15 @@ public class Ticket {
     //EFFECTS: returns the price of a ticket
     public double getPrice() {
         return price;
+    }
+
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("showtime", showtime);
+        return json;
     }
 
 }

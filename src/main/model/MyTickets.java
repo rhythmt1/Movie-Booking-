@@ -1,8 +1,14 @@
 package model;
 
-import java.util.LinkedList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class MyTickets {
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+public class MyTickets implements Writable {
 
     private static LinkedList<Ticket> myTickets;
     private static double ticketPrice = 12.99;
@@ -33,6 +39,29 @@ public class MyTickets {
         return (myTickets.size() > 0);
 
 
+    }
+
+    // EFFECTS: returns an unmodifiable list of tickets
+    public List<Ticket> getTickets() {
+        return Collections.unmodifiableList(myTickets);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("tickets", myTicketsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray myTicketsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Ticket t : myTickets) {
+            jsonArray.put(t.toJson());
+        }
+
+        return jsonArray;
     }
 
 }
