@@ -2,8 +2,8 @@ package persistence;
 
 
 import model.Movie;
-import model.MyTickets;
 import model.Ticket;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JsonTest {

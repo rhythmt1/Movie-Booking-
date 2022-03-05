@@ -42,8 +42,8 @@ class JsonReaderTest extends JsonTest {
             MyTickets mt = reader.read();
             List<Ticket> tickets = mt.getTickets();
             assertEquals(2, tickets.size());
-            checkTicket("Encanto", tickets.get(0);
-            checkTicket("Uncharted", tickets.get(1);
+            checkTicket("Encanto", tickets.get(0));
+            checkTicket("Uncharted", tickets.get(1));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
