@@ -47,7 +47,7 @@ class JsonWriterTest extends JsonTest {
         try {
             MyTickets mt = new MyTickets();
             mt.addTicket(new Ticket(new Movie("Encanto", "6:30pmm")));
-            mt.addTicket(new Ticket((new Movie("Uncharted", "10:45pm")));
+            mt.addTicket(new Ticket(new Movie("Uncharted", "10:45pm")));
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralWorkroom.json");
             writer.open();
             writer.write(mt);
@@ -57,8 +57,8 @@ class JsonWriterTest extends JsonTest {
             mt = reader.read();
             List<Ticket> tickets = mt.getTickets();
             assertEquals(2, tickets.size());
-            checkTicket("Encanto", tickets.get(0);
-            checkTicket("Uncharted", tickets.get(1);
+            checkTicket("Encanto", tickets.get(0));
+            checkTicket("Uncharted", tickets.get(1));
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");
