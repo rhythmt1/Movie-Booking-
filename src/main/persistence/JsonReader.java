@@ -1,7 +1,7 @@
 package persistence;
 
 import model.Movie;
-import model.MyTickets;
+import model.MovieTheater;
 import model.Ticket;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class JsonReader {
@@ -20,9 +21,9 @@ public class JsonReader {
         this.source = source;
     }
 
-    // EFFECTS: reads workroom from file and returns it;
+    // EFFECTS: reads tickets from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public MyTickets read() throws IOException {
+    public MovieTheater read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseMyTickets(jsonObject);
@@ -39,16 +40,22 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses workroom from JSON object and returns it
-    private MyTickets parseMyTickets(JSONObject jsonObject) {
-        MyTickets mt = new MyTickets();
+    //MODIFIES: mt
+    // EFFECTS: parses MyTickets from JSON object and returns it
+    private MovieTheater parseMyTickets(JSONObject jsonObject) {
+        MovieTheater mt = new MovieTheater();
+        // read movies and add them to array
+        mt.clearMovies();
+        addMovies(mt, jsonObject);
+        // read tickets, find corresponding movie, create relationship and add to array of tickets
         addTickets(mt, jsonObject);
+
         return mt;
     }
 
-    // MODIFIES: wr
-    // EFFECTS: parses thingies from JSON object and adds them to workroom
-    private void addTickets(MyTickets mt, JSONObject jsonObject) {
+    // MODIFIES: mt
+    // EFFECTS: parses tickets from JSON object and adds them to MyTickets
+    private void addTickets(MovieTheater mt, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("tickets");
         for (Object json : jsonArray) {
             JSONObject nextTicket = (JSONObject) json;
@@ -57,12 +64,65 @@ public class JsonReader {
     }
 
     // MODIFIES: mt
-    // EFFECTS: parses thingy from JSON object and adds it to workroom
-    private void addTicket(MyTickets mt, JSONObject jsonObject) {
-        String title = jsonObject.getString("title");
-        String showtime = jsonObject.getString("showtime");
-        Movie movie = new Movie(title, showtime);
-        Ticket t = new Ticket(movie);
-        mt.addTicket(t);
+    // EFFECTS: parses ticket from JSON object and adds it to MyTickets
+    private void addTicket(MovieTheater mt, JSONObject jsonObject) {
+        String title = jsonObject.getString("movie title");
+        String showtime = jsonObject.getString("movie showtime");
+        int seatNum = jsonObject.getInt("seat number");
+        // seat number
+
+        Movie m = mt.findMovie(title, showtime);
+        if (m != null) {
+            Ticket t = new Ticket(m, seatNum);
+            mt.addTicket(t);
+        }
+
+
     }
+
+    // MODIFIES: mt
+    // EFFECTS: parses movie from JSON object and adds it to MyTickets
+    private void addMovie(MovieTheater mt, JSONObject jsonObject) {
+        String title = jsonObject.getString("movie title");
+        String showtime = jsonObject.getString("movie showtime");
+        double rating = jsonObject.getDouble("movie rating");
+        int numOfRatings = jsonObject.getInt("number of ratings");
+        double total = jsonObject.getDouble("total ratings");
+
+        Movie movie = new Movie(title, showtime, rating, numOfRatings, total);
+        mt.addMovie(movie);
+    }
+
+    // MODIFIES: mt
+    // EFFECTS: parses movies from JSON object and adds it to MyTickets
+    private void addMovies(MovieTheater mt, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("movies");
+        for (Object json : jsonArray) {
+            JSONObject nextMovie = (JSONObject) json;
+            addMovie(mt, nextMovie);
+        }
+    }
+
+    // EFFECTS: parses MyTickets from JSON object and returns it
+    private ArrayList<Movie> parseMovies(JSONObject jsonObject) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        movies.add(new Movie("The Batman", "9:30pm"));
+        movies.add(new Movie("Encanto", "6:30pm"));
+        movies.add(new Movie("Spider-man", "7:00pm"));
+        movies.add(new Movie("Uncharted", "10:45pm"));
+        return movies;
+
+    }
+
+    // EFFECTS: reads movies from file and returns it;
+    // throws IOException if an error occurs reading data from file
+    public ArrayList<Movie> read2() throws IOException {
+        String jsonData = readFile(source);
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return parseMovies(jsonObject);
+
+    }
+
+
+
 }

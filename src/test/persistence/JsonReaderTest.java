@@ -2,7 +2,7 @@ package persistence;
 
 import model.Movie;
 import model.Ticket;
-import model.MyTickets;
+import model.MovieTheater;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ class JsonReaderTest extends JsonTest {
     void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
-            MyTickets mt = reader.read();
+            MovieTheater mt = reader.read();
             fail("IOException expected");
         } catch (IOException e) {
             // pass
@@ -25,10 +25,10 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testReaderEmptyWorkRoom() {
-        JsonReader reader = new JsonReader("./data/testReaderEmptyWorkRoom.json");
+    void testReaderEmptyTickets() {
+        JsonReader reader = new JsonReader("./data/testReaderEmptyTickets.json");
         try {
-            MyTickets mt = reader.read();
+            MovieTheater mt = reader.read();
             assertEquals(0, mt.getNumOfTickets());
         } catch (IOException e) {
             fail("Couldn't read from file");
@@ -36,14 +36,14 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testReaderGeneralWorkRoom() {
-        JsonReader reader = new JsonReader("./data/testReaderGeneralWorkRoom.json");
+    void testReaderGeneralTickets() {
+        JsonReader reader = new JsonReader("./data/testReaderGeneralTickets.json");
         try {
-            MyTickets mt = reader.read();
+            MovieTheater mt = reader.read();
             List<Ticket> tickets = mt.getTickets();
             assertEquals(2, tickets.size());
-            checkTicket("Encanto", tickets.get(0));
-            checkTicket("Uncharted", tickets.get(1));
+            checkTicket(new Movie("Encanto", "6:30pm"), tickets.get(0));
+            checkTicket(new Movie("Uncharted", "10:45pm"), tickets.get(1));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

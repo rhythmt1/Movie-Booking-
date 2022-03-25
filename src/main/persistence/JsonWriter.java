@@ -1,6 +1,6 @@
 package persistence;
 
-import model.MyTickets;
+import model.MovieTheater;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -27,9 +27,9 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
-    public void write(MyTickets wr) {
-        JSONObject json = wr.toJson();
+    // EFFECTS: writes JSON representation of tickets to file
+    public void write(MovieTheater mt) {
+        JSONObject json = mt.toJson();
         saveToFile(json.toString(TAB));
     }
 

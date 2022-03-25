@@ -4,20 +4,18 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 public class Ticket implements Writable {
-    private static final double price = 12.99;
-
     private int seatNum;
-    private String title;
     private Movie movie;
-    private String showtime;
 
     //EFFECTS: a ticket for a given movie
     public Ticket(Movie movie) {
         this.movie = movie;
         seatNum = 0;
-        title = movie.getTitle();
-        showtime = movie.getShowtime();
+    }
 
+    public Ticket(Movie movie, int seatNum) {
+        this.movie = movie;
+        this.seatNum = seatNum;
     }
 
     //REQUIRES: seatNum >= 1 and <= 300
@@ -32,27 +30,19 @@ public class Ticket implements Writable {
         return seatNum;
     }
 
-    //EFFECTS: returns the showtime on the ticket
-    public String getShowtime() {
-        return showtime;
-    }
 
     //EFFECTS: returns the movie title on the ticket
-    public String getTitle() {
-        return title;
-    }
-
-    //EFFECTS: returns the price of a ticket
-    public double getPrice() {
-        return price;
+    public Movie getMovie() {
+        return movie;
     }
 
 
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("title", title);
-        json.put("showtime", showtime);
+        json.put("movie title", movie.getTitle());
+        json.put("movie showtime", movie.getShowtime());
+        json.put("seat number", seatNum);
         return json;
     }
 

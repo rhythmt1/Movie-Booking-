@@ -1,6 +1,9 @@
 package model;
 
-public class Movie {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Movie implements Writable {
     private String title;
     private String showtime;
     private double rating;
@@ -17,6 +20,17 @@ public class Movie {
 
 
     }
+
+    public Movie(String title, String showtime, double rating, int numOfRatings, double total) {
+        this.title = title;
+        this.showtime = showtime;
+        this.rating = rating;
+        this.numOfRatings = numOfRatings;
+        this.total = total;
+
+
+    }
+
 
     //REQUIRES: rating is >= 1 and <= 10
     //MODIFIES: this
@@ -44,6 +58,15 @@ public class Movie {
         return showtime;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("movie title", title);
+        json.put("movie showtime", showtime);
+        json.put("movie rating", rating);
+        json.put("number of ratings", numOfRatings);
+        json.put("total ratings", total);
 
-
+        return json;
+    }
 }
