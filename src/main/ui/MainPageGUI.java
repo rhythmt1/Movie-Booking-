@@ -1,17 +1,9 @@
 package ui;
 
-import model.Movie;
-import model.MovieTheater;
-import persistence.JsonReader;
-import persistence.JsonWriter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 //Main page for Movie Theater App
 public class MainPageGUI implements ActionListener {
@@ -23,14 +15,9 @@ public class MainPageGUI implements ActionListener {
     private JPanel panel;
     private JLabel image;
     private JFrame frame2;
-    private Movie batman;
-    private Movie encanto;
-    private Movie uncharted;
-    private Movie spiderman;
-    private MovieTheater tickets;
-    private List<Movie> allMovies;
-    private JsonReader jsonReader;
-    private JsonWriter jsonWriter;
+    private JTableGUI table;
+
+
 
 
 
@@ -38,17 +25,10 @@ public class MainPageGUI implements ActionListener {
     //EFFECTS: constructs main page
     @SuppressWarnings("methodlength")
     public MainPageGUI() {
-        tickets = new MovieTheater();
-        allMovies = tickets.getMovies();
-        batman = allMovies.get(0);
-        encanto = allMovies.get(1);
-        spiderman = allMovies.get(2);
-        uncharted = allMovies.get(3);
 
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
         frame = new JFrame();
         frame2 = new JFrame();
+
         panel = new JPanel();
         button1 = new JButton("Add or Remove A Ticket");
         button2 = new JButton("Save Tickets");
@@ -90,45 +70,16 @@ public class MainPageGUI implements ActionListener {
         Object o = e.getSource();
 
         if (o == button1) {
-            new JTableGUI();
+            table = new JTableGUI();
             frame2.setVisible(false);
 
         } else if (o == button2) {
-            saveTable();
+            table.saveTable();
         } else if (o == button3) {
-            loadTickets();
-
+            table.loadTable();
         }
     }
 
-    //saves the tickets to file
-    public void saveTable() {
-        try {
-            jsonWriter.open();
-            jsonWriter.write(tickets);
-            jsonWriter.close();
-            System.out.println("Saved tickets to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: loads tickets from file
-    private void loadTickets() {
-        try {
-            tickets = jsonReader.read();
-            allMovies = jsonReader.read2();
-            batman = tickets.getMovies().get(0);
-            encanto = tickets.getMovies().get(1);
-            spiderman = tickets.getMovies().get(2);
-            uncharted = tickets.getMovies().get(3);
-
-            System.out.println("Loaded tickets from " + JSON_STORE);
-        } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
-        }
-    }
 
 
 

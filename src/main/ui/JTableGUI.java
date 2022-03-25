@@ -1,12 +1,21 @@
 package ui;
 
+import model.Movie;
+import model.MovieTheater;
+import model.Ticket;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 public class JTableGUI {
-
+    private static final String JSON_STORE = "./data/tickets.json";
     JFrame frame;
     JTable table;
     JTextField textMovie;
@@ -20,12 +29,29 @@ public class JTableGUI {
     JLabel movieLabel;
     JLabel showtimeLabel;
     JLabel seatNumLabel;
+    private Movie batman;
+    private Movie encanto;
+    private Movie uncharted;
+    private Movie spiderman;
+    private MovieTheater tickets;
+    private Ticket ticket;
+    private List<Movie> allMovies;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
 
 
     //Table for movie tickets
+    @SuppressWarnings("methodlength")
     public JTableGUI() {
         frame = new JFrame();
         table = new JTable();
+        tickets = new MovieTheater();
+        allMovies = tickets.getMovies();
+        batman = allMovies.get(0);
+        encanto = allMovies.get(1);
+        spiderman = allMovies.get(2);
+        uncharted = allMovies.get(3);
         Object[] columns = {"Movie Title", "Movie Showtime", "Seat Number"};
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columns);
@@ -45,8 +71,25 @@ public class JTableGUI {
         addButton.setBounds(250, 220, 150, 25);
         dltButton.setBounds(250, 265, 150, 25);
         pane = new JScrollPane(table);
-        pane.setBounds(0,0,880,200);
+        pane.setBounds(0, 0, 880, 200);
         setUp();
+
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+
+        if (textMovie.getText() == encanto.getTitle()) {
+            ticket = new Ticket(encanto);
+            tickets.addTicket(ticket);
+        } else if (textMovie.getText() == batman.getTitle()) {
+            ticket = new Ticket(batman);
+            tickets.addTicket(ticket);
+        } else if (textMovie.getText() == spiderman.getTitle()) {
+            ticket = new Ticket(spiderman);
+            tickets.addTicket(ticket);
+        } else if (textMovie.getText() == uncharted.getTitle()) {
+            ticket = new Ticket(uncharted);
+            tickets.addTicket(ticket);
+        }
     }
 
     //EFFECTS: sets up frame and action listener
@@ -110,6 +153,35 @@ public class JTableGUI {
         frame.add(movieLabel);
         frame.add(showtimeLabel);
         frame.add(seatNumLabel);
+    }
+
+    //saves the tickets to file
+    public void saveTable() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(tickets);
+            jsonWriter.close();
+            System.out.println("Saved tickets to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads tickets from file
+    public void loadTable() {
+        try {
+            tickets = jsonReader.read();
+            allMovies = jsonReader.read2();
+            batman = tickets.getMovies().get(0);
+            encanto = tickets.getMovies().get(1);
+            spiderman = tickets.getMovies().get(2);
+            uncharted = tickets.getMovies().get(3);
+
+            System.out.println("Loaded tickets from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
 
