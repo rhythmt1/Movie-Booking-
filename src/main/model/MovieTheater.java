@@ -4,10 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MovieTheater implements Writable {
 
@@ -31,6 +28,8 @@ public class MovieTheater implements Writable {
     //EFFECTS: adds given ticket to the list of tickets
     public void addTicket(Ticket t) {
         myTickets.add(t);
+        EventLog.getInstance().logEvent(new Event("Ticket for " + t.getMovie().getTitle() + " added to Tickets"));
+
     }
 
     public void clearMovies() {
@@ -72,9 +71,18 @@ public class MovieTheater implements Writable {
         return Collections.unmodifiableList(myTickets);
     }
 
+
     // EFFECTS: returns an unmodifiable list of movies
     public List<Movie> getMovies() {
         return Collections.unmodifiableList(movies);
+    }
+
+    public void removeTicket(int index) {
+        List<Ticket> modifiable = new LinkedList<Ticket>(Collections.unmodifiableList(myTickets));
+        modifiable.remove(index);
+        EventLog.getInstance().logEvent(new Event("Ticket for " + getTickets().get(index).getMovie().getTitle()
+                + " removed from Tickets"));
+
     }
 
     @Override

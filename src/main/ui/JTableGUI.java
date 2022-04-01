@@ -1,8 +1,6 @@
 package ui;
 
-import model.Movie;
-import model.MovieTheater;
-import model.Ticket;
+import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -14,12 +12,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-public class JTableGUI {
+public class JTableGUI implements LogPrinter {
     private static final String JSON_STORE = "./data/tickets.json";
     JFrame frame;
     JTable table;
     JTextField textMovie;
-    JTextField textShowtime;
     JTextField textSeatNum;
     JButton addButton;
     JButton dltButton;
@@ -27,7 +24,6 @@ public class JTableGUI {
     Object[] row;
     JScrollPane pane;
     JLabel movieLabel;
-    JLabel showtimeLabel;
     JLabel seatNumLabel;
     private Movie batman;
     private Movie encanto;
@@ -58,7 +54,6 @@ public class JTableGUI {
         table.setModel(model);
         table.setRowHeight(30);
         textMovie = new JTextField();
-        textShowtime = new JTextField();
         textSeatNum = new JTextField();
         addLabels();
 
@@ -66,8 +61,7 @@ public class JTableGUI {
         addButton = new JButton("Add Ticket");
         dltButton = new JButton("Remove Ticket");
         textMovie.setBounds(130, 220, 110, 25);
-        textShowtime.setBounds(130, 250, 110, 25);
-        textSeatNum.setBounds(130, 280, 110, 25);
+        textSeatNum.setBounds(130, 250, 110, 25);
         addButton.setBounds(250, 220, 150, 25);
         dltButton.setBounds(250, 265, 150, 25);
         pane = new JScrollPane(table);
@@ -77,29 +71,16 @@ public class JTableGUI {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
-        if (textMovie.getText() == encanto.getTitle()) {
-            ticket = new Ticket(encanto);
-            tickets.addTicket(ticket);
-        } else if (textMovie.getText() == batman.getTitle()) {
-            ticket = new Ticket(batman);
-            tickets.addTicket(ticket);
-        } else if (textMovie.getText() == spiderman.getTitle()) {
-            ticket = new Ticket(spiderman);
-            tickets.addTicket(ticket);
-        } else if (textMovie.getText() == uncharted.getTitle()) {
-            ticket = new Ticket(uncharted);
-            tickets.addTicket(ticket);
-        }
     }
 
     //EFFECTS: sets up frame and action listener
+    @SuppressWarnings("methodlength")
     public void setUp() {
 
 
         frame.setLayout(null);
         frame.add(pane);
         frame.add(textMovie);
-        frame.add(textShowtime);
         frame.add(textSeatNum);
 
         frame.add(addButton);
@@ -109,18 +90,48 @@ public class JTableGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 row[0] = textMovie.getText();
-                row[1] = textShowtime.getText();
                 row[2] = textSeatNum.getText();
 
-                model.addRow(row);
-
-
+                if (encanto.getTitle().equals(textMovie.getText())) {
+                    row[1] = encanto.getShowtime();
+                    model.addRow(row);
+                    ticket = new Ticket(encanto, Integer.parseInt(textSeatNum.getText()));
+                    tickets.addTicket(ticket);
+                } else if (batman.getTitle().equals(textMovie.getText())) {
+                    row[1] = batman.getShowtime();
+                    model.addRow(row);
+                    ticket = new Ticket(batman, Integer.parseInt(textSeatNum.getText()));
+                    tickets.addTicket(ticket);
+                } else if (spiderman.getTitle().equals(textMovie.getText())) {
+                    row[1] = spiderman.getShowtime();
+                    model.addRow(row);
+                    ticket = new Ticket(spiderman, Integer.parseInt(textSeatNum.getText()));
+                    tickets.addTicket(ticket);
+                } else if (uncharted.getTitle().equals(textMovie.getText())) {
+                    row[1] = uncharted.getShowtime();
+                    model.addRow(row);
+                    ticket = new Ticket(uncharted, Integer.parseInt(textSeatNum.getText()));
+                    tickets.addTicket(ticket);
+                }
             }
         });
         removeListener();
         frame.setSize(900, 400);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {
+                    printLog(EventLog.getInstance());
+                } catch (LogException e) {
+                    e.printStackTrace();
+                }
+                System.exit(0);
+            }
+
+        });
+
         frame.setTitle("Movie Booking App");
 
         frame.setVisible(true);
@@ -135,6 +146,7 @@ public class JTableGUI {
 
                 if (i >= 0) {
                     model.removeRow(i);
+                    tickets.removeTicket(i);
                 } else {
                     System.out.println("Delete Error");
                 }
@@ -145,13 +157,10 @@ public class JTableGUI {
     //EFFECTS: adds labels to frame
     public void addLabels() {
         movieLabel = new JLabel("Enter Movie");
-        showtimeLabel = new JLabel("Enter Showtime");
         seatNumLabel = new JLabel("Enter Seat #");
         movieLabel.setBounds(20, 220, 110, 25);
-        showtimeLabel.setBounds(20, 250, 110, 25);
-        seatNumLabel.setBounds(20, 280, 110, 25);
+        seatNumLabel.setBounds(20, 250, 110, 25);
         frame.add(movieLabel);
-        frame.add(showtimeLabel);
         frame.add(seatNumLabel);
     }
 
@@ -169,7 +178,9 @@ public class JTableGUI {
 
     // MODIFIES: this
     // EFFECTS: loads tickets from file
+    @SuppressWarnings("methodlength")
     public void loadTable() {
+
         try {
             tickets = jsonReader.read();
             allMovies = jsonReader.read2();
@@ -177,10 +188,50 @@ public class JTableGUI {
             encanto = tickets.getMovies().get(1);
             spiderman = tickets.getMovies().get(2);
             uncharted = tickets.getMovies().get(3);
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            Object[] columns = {"Movie Title", "Movie Showtime", "Seat Number"};
+            String[][] data = {
+                    {getMovieTitle(0),
+                            getMovieShowtime(0),
+                            getSeatNum(0)}, {getMovieTitle(1),
+                    getMovieShowtime(1),
+                    getSeatNum(1)}, {getMovieTitle(2),
+                    getMovieShowtime(2),
+                    getSeatNum(2)}, {getMovieTitle(3),
+                    getMovieShowtime(3),
+                    getSeatNum(3)}
+            };
+
+            model.setDataVector(data, columns);
 
             System.out.println("Loaded tickets from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+
+    }
+
+    private String getMovieTitle(int index) {
+        if (tickets.getTickets().get(index) == null) {
+            return "empty";
+        } else {
+            return tickets.getTickets().get(index).getMovie().getTitle();
+        }
+    }
+
+    private String getMovieShowtime(int index) {
+        if (tickets.getTickets().get(index) == null) {
+            return "empty";
+        } else {
+            return tickets.getTickets().get(index).getMovie().getShowtime();
+        }
+    }
+
+    private String getSeatNum(int index) {
+        if (tickets.getTickets().get(index) == null) {
+            return "empty";
+        } else {
+            return String.valueOf(tickets.getTickets().get(index).getSeatNum());
         }
     }
 
@@ -190,4 +241,10 @@ public class JTableGUI {
         new JTableGUI();
     }
 
+    @Override
+    public void printLog(EventLog el) throws LogException {
+        for (Event event : el) {
+            System.out.println(event.getDescription() + " on " + event.getDate());
+        }
+    }
 }

@@ -1,5 +1,9 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
+import model.LogException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +11,6 @@ import java.awt.event.ActionListener;
 
 //Main page for Movie Theater App
 public class MainPageGUI implements ActionListener {
-    private static final String JSON_STORE = "./data/tickets.json";
     private JButton button1;
     private JButton button2;
     private JButton button3;
@@ -49,12 +52,22 @@ public class MainPageGUI implements ActionListener {
         image.setVisible(true);
         frame2.add(image);
         image.setSize(50, 50);
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setSize(500, 500);
+        frame2.setSize(1000, 500);
         frame2.setVisible(true);
 
         frame.add(panel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {
+                    table.printLog(EventLog.getInstance());
+                } catch (LogException e) {
+                    e.printStackTrace();
+                }
+                System.exit(0);
+            }
+
+        });
         frame.setTitle("Movie Booking App");
 
 
@@ -75,8 +88,11 @@ public class MainPageGUI implements ActionListener {
 
         } else if (o == button2) {
             table.saveTable();
+            EventLog.getInstance().logEvent(new Event("Tickets were saved"));
         } else if (o == button3) {
+            table = new JTableGUI();
             table.loadTable();
+            EventLog.getInstance().logEvent(new Event("saved Tickets were loaded"));
         }
     }
 

@@ -13,11 +13,4 @@ public class JsonTest {
         assertEquals(movie, ticket.getMovie());
     }
 
-    protected void checkMovie(Movie movie, double rating, String title, String showtime) {
-        assertEquals(rating, movie.getRating());
-        assertEquals(title, movie.getTitle());
-        assertEquals(showtime, movie.getShowtime());
-
-    }
-
 }

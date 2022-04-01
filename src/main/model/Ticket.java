@@ -23,6 +23,7 @@ public class Ticket implements Writable {
     //EFFECTS: assigns the given seat number
     public void selectSeat(int seatNum) {
         this.seatNum = seatNum;
+
     }
 
     //EFFECTS: returns seat number on the ticket
