@@ -28,37 +28,24 @@ are good, makes the experience much more enjoyable.
 - As a user, I want to be able to load my saved information
 
 ## Phase 4: Task 2
-Ticket for Encanto added to Tickets on Fri Apr 01 12:42:28 PDT 2022
+Ticket for Encanto added to Tickets on Fri Apr 01 16:02:59 PDT 2022
 
-Ticket for The Batman added to Tickets on Fri Apr 01 12:42:34 PDT 2022
+Ticket for Uncharted added to Tickets on Fri Apr 01 16:02:59 PDT 2022
 
-Ticket for Spider-man added to Tickets on Fri Apr 01 12:42:41 PDT 2022
+Ticket for The Batman added to Tickets on Fri Apr 01 16:02:59 PDT 2022
 
-Ticket for Uncharted added to Tickets on Fri Apr 01 12:42:50 PDT 2022
+Ticket for Uncharted added to Tickets on Fri Apr 01 16:02:59 PDT 2022
 
-Tickets were saved on Fri Apr 01 12:42:53 PDT 2022
-
-
-Ticket for Encanto added to Tickets on Fri Apr 01 14:27:45 PDT 2022
-
-Ticket for The Batman added to Tickets on Fri Apr 01 14:27:45 PDT 2022
-
-Ticket for Spider-man added to Tickets on Fri Apr 01 14:27:45 PDT 2022
-
-Ticket for Uncharted added to Tickets on Fri Apr 01 14:27:45 PDT 2022
-
-saved Tickets were loaded on Fri Apr 01 14:27:45 PDT 2022
-
-Ticket for Encanto removed from Tickets on Fri Apr 01 15:18:20 PDT 2022
-
-Tickets were saved on Fri Apr 01 15:18:23 PDT 2022
+Ticket for Uncharted removed from Tickets on Fri Apr 01 16:03:03 PDT 2022
 ## Phase 4: Task 3
-If I had more time to refactor my design, I would reduce coupling because
+- If I had more time to refactor my design, I would reduce coupling because
 many of my classes are associated with the same classes and are called individually.
 For example, the MovieTheater class uses the Ticket and Movie classes, so it would
 be a better design choice in my UI to get a ticket and movie using methods from
 the field for the MovieTheater class, rather than making separate fields for Ticket
-and Movie and calling them directly. Another thing I would change is to reduce reduplication
+and Movie and calling them directly. 
+
+- Another thing I would change is to reduce reduplication
 of code and create methods for that code and call those methods where needed. For example,
-I have 4 different booking methods for diffeent movies in the MovieBookingApp class which have reduplication.
+I have 4 different booking methods for different movies in the MovieBookingApp class which are all similar.
 It would be better design to have one method which could handle the booking for different movies.

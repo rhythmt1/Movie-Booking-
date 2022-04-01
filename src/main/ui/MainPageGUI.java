@@ -1,6 +1,5 @@
 package ui;
 
-import model.Event;
 import model.EventLog;
 import model.LogException;
 
@@ -88,11 +87,9 @@ public class MainPageGUI implements ActionListener {
 
         } else if (o == button2) {
             table.saveTable();
-            EventLog.getInstance().logEvent(new Event("Tickets were saved"));
         } else if (o == button3) {
             table = new JTableGUI();
             table.loadTable();
-            EventLog.getInstance().logEvent(new Event("saved Tickets were loaded"));
         }
     }
 
