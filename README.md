@@ -26,6 +26,8 @@ are good, makes the experience much more enjoyable.
 - As a user, I want to be able to see a movie rating
 - As a user, I want to be able to save my purchase information
 - As a user, I want to be able to load my saved information
+- As a user, I want to be able to remove a ticket from my tickets
+
 
 ## Phase 4: Task 2
 Ticket for Encanto added to Tickets on Fri Apr 01 16:02:59 PDT 2022

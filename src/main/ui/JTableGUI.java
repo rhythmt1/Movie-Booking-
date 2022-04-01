@@ -176,6 +176,7 @@ public class JTableGUI implements LogPrinter {
         }
     }
 
+
     // MODIFIES: this
     // EFFECTS: loads tickets from file
     @SuppressWarnings("methodlength")
@@ -202,6 +203,7 @@ public class JTableGUI implements LogPrinter {
                     getSeatNum(3)}
             };
 
+
             model.setDataVector(data, columns);
 
             System.out.println("Loaded tickets from " + JSON_STORE);
@@ -211,6 +213,7 @@ public class JTableGUI implements LogPrinter {
 
     }
 
+    //EFFECTS: gets title of movie from the ticket with given index from tickets
     private String getMovieTitle(int index) {
         if (tickets.getTickets().get(index) == null) {
             return "empty";
@@ -219,6 +222,7 @@ public class JTableGUI implements LogPrinter {
         }
     }
 
+    //EFFECTS: gets showtime of movie from the ticket with given index from tickets
     private String getMovieShowtime(int index) {
         if (tickets.getTickets().get(index) == null) {
             return "empty";
@@ -227,6 +231,7 @@ public class JTableGUI implements LogPrinter {
         }
     }
 
+    //EFFECTS: gets seat number of movie from the ticket with given index from tickets
     private String getSeatNum(int index) {
         if (tickets.getTickets().get(index) == null) {
             return "empty";
@@ -237,10 +242,12 @@ public class JTableGUI implements LogPrinter {
 
 
 
+    //EFFECTS: main method for JTableGUI
     public static void main(String[] args) {
         new JTableGUI();
     }
 
+    //EFFECTS: prints event logs for add and remove tickets in the console
     @Override
     public void printLog(EventLog el) throws LogException {
         for (Event event : el) {
